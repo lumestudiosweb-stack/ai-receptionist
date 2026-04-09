@@ -1,0 +1,20 @@
+{
+  "name": "ai-receptionist",
+  "version": "1.0.0",
+  "description": "AI-powered phone receptionist with real-time dashboard",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "setup-db": "node db.js"
+  },
+  "dependencies": {
+    "groq-sdk": "^0.9.0",
+    "@google/generative-ai": "^0.21.0",
+    "sql.js": "^1.11.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "twilio": "^5.4.0",
+    "ws": "^8.18.0"
+  }
+}
