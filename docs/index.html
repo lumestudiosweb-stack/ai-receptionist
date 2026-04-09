@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Receptionist</title>
+  <meta name="description" content="AI-powered phone receptionist that answers calls 24/7 with real-time monitoring dashboard.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 80px 40px;
+      text-align: center;
+      border-bottom: 1px solid #1a1a1a;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border: 1px solid #333;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #888;
+      margin-bottom: 32px;
+    }
+
+    .hero h1 {
+      font-size: 72px;
+      font-weight: 900;
+      letter-spacing: -3px;
+      line-height: 1;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 span {
+      display: block;
+      color: #444;
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: 6px;
+      margin-top: 16px;
+      text-transform: uppercase;
+    }
+
+    .hero p {
+      font-size: 16px;
+      color: #666;
+      max-width: 520px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.15s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: #fff;
+      color: #000;
+    }
+
+    .btn-primary:hover {
+      background: #ddd;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #fff;
+      border: 1px solid #333;
+    }
+
+    .btn-secondary:hover {
+      border-color: #fff;
+    }
+
+    /* Features */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .feature {
+      background: #000;
+      padding: 48px 40px;
+    }
+
+    .feature .feature-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: #333;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+
+    .feature h3 {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+
+    .feature p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.7;
+    }
+
+    /* Dashboard Preview */
+    .preview-section {
+      padding: 80px 40px;
+      text-align: center;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .preview-section h2 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 40px;
+    }
+
+    .dashboard-preview {
+      max-width: 1100px;
+      margin: 0 auto;
+      border: 1px solid #1a1a1a;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    /* Dashboard (embedded) */
+    .dash-header {
+      padding: 24px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .dash-header h2 {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+    }
+
+    .dash-header h2 span { color: #444; font-weight: 500; }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      border: 1px solid #333;
+      background: #0a0a0a;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #fff;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
+      50% { opacity: 0.5; box-shadow: 0 0 0 6px rgba(255,255,255,0); }
+    }
+
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .stat-card {
+      background: #050505;
+      padding: 24px 28px;
+    }
+
+    .stat-card .label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #444;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .stat-card .value {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -2px;
+    }
+
+    .dash-body {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 1px;
+      background: #1a1a1a;
+      min-height: 380px;
+    }
+
+    .dash-calls {
+      background: #050505;
+      padding: 8px;
+    }
+
+    .dash-calls-header {
+      padding: 14px 20px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #444;
+    }
+
+    .call-item {
+      border: 1px solid #1a1a1a;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 4px;
+      transition: all 0.15s;
+    }
+
+    .call-item.active-call {
+      border-color: #fff;
+      background: #0a0a0a;
+      animation: borderPulse 2.5s infinite;
+    }
+
+    @keyframes borderPulse {
+      0%, 100% { border-color: #fff; }
+      50% { border-color: #333; }
+    }
+
+    .call-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .caller {
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: -0.3px;
+    }
+
+    .call-status {
+      font-size: 10px;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .call-status.live { background: #fff; color: #000; }
+    .call-status.done { background: #1a1a1a; color: #666; }
+
+    .call-meta {
+      font-size: 12px;
+      color: #444;
+      font-weight: 500;
+      display: flex;
+      gap: 12px;
+    }
+
+    .call-summary {
+      font-size: 13px;
+      color: #666;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .intent-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 100px;
+      background: #1a1a1a;
+      color: #777;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .dash-activity {
+      background: #050505;
+      padding: 8px;
+    }
+
+    .dash-activity-header {
+      padding: 14px 20px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #444;
+    }
+
+    .activity-item {
+      padding: 12px 16px;
+      margin-bottom: 4px;
+      border-radius: 6px;
+      font-size: 12px;
+      line-height: 1.6;
+      border-left: 2px solid;
+      background: #0a0a0a;
+    }
+
+    .activity-item .time {
+      font-size: 10px;
+      color: #333;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 3px;
+    }
+
+    .activity-item .text { color: #888; }
+    .activity-item .text strong { color: #fff; font-weight: 700; }
+
+    .activity-item.ev-call { border-color: #fff; }
+    .activity-item.ev-caller { border-color: #666; }
+    .activity-item.ev-ai { border-color: #333; }
+    .activity-item.ev-end { border-color: #444; }
+
+    /* Tech stack */
+    .tech-section {
+      padding: 60px 40px;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .tech-section h2 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .tech-grid {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .tech-item {
+      font-size: 13px;
+      color: #555;
+      font-weight: 600;
+      padding: 12px 24px;
+      border: 1px solid #1a1a1a;
+      border-radius: 8px;
+    }
+
+    /* Footer */
+    .footer {
+      padding: 40px;
+      text-align: center;
+      color: #333;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .footer a {
+      color: #666;
+      text-decoration: none;
+    }
+
+    .footer a:hover { color: #fff; }
+
+    /* Selection */
+    ::selection { background: #fff; color: #000; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
+
+    @media (max-width: 900px) {
+      .hero h1 { font-size: 42px; letter-spacing: -2px; }
+      .features { grid-template-columns: 1fr; }
+      .dash-body { grid-template-columns: 1fr; }
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+      .hero { padding: 60px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-badge">Open Source</div>
+    <h1>
+      AI Receptionist
+      <span>Never miss a call again</span>
+    </h1>
+    <p>
+      An AI-powered phone receptionist that answers calls 24/7,
+      has natural conversations, and shows everything on a real-time dashboard.
+    </p>
+    <div class="hero-actions">
+      <a href="https://github.com/lumestudiosweb-stack/ai-receptionist" class="btn btn-primary">View on GitHub</a>
+      <a href="#demo" class="btn btn-secondary">See Dashboard</a>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="features">
+    <div class="feature">
+      <div class="feature-num">01</div>
+      <h3>AI-Powered Calls</h3>
+      <p>Groq's Llama 3.3 70B answers calls naturally, understands intent, and collects information like a real receptionist.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-num">02</div>
+      <h3>Live Dashboard</h3>
+      <p>Real-time WebSocket updates show every call, message, and AI response as it happens. Full transcripts and analytics.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-num">03</div>
+      <h3>Always On</h3>
+      <p>Runs 24/7 with PM2 process manager. Auto-restart, call logging to SQLite, and Gemini AI as automatic fallback.</p>
+    </div>
+  </div>
+
+  <!-- Dashboard Preview -->
+  <div class="preview-section" id="demo">
+    <h2>Live Dashboard Preview</h2>
+    <div class="dashboard-preview">
+      <div class="dash-header">
+        <h2>AI RECEPTIONIST <span>/ DASHBOARD</span></h2>
+        <span class="status-badge">
+          <span class="status-dot"></span>
+          Active 24/7
+        </span>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="label">Active Calls</div>
+          <div class="value">1</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Today's Calls</div>
+          <div class="value">24</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Avg Duration</div>
+          <div class="value">2m 14s</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Satisfaction</div>
+          <div class="value">92%</div>
+        </div>
+      </div>
+
+      <div class="dash-body">
+        <div class="dash-calls">
+          <div class="dash-calls-header">Recent Calls</div>
+
+          <div class="call-item active-call">
+            <div class="call-top">
+              <span class="caller">+1 (415) 892-3047</span>
+              <span class="call-status live">In Progress</span>
+            </div>
+            <div class="call-meta">
+              <span>2:34 PM</span>
+              <span>1m 22s</span>
+            </div>
+          </div>
+
+          <div class="call-item">
+            <div class="call-top">
+              <span class="caller">+1 (212) 555-0198</span>
+              <span class="call-status done">Completed</span>
+            </div>
+            <div class="call-meta">
+              <span>2:18 PM</span>
+              <span>3m 45s</span>
+              <span class="intent-badge">Appointment</span>
+            </div>
+            <div class="call-summary">Caller booked a consultation for next Thursday at 10 AM. Name: Sarah Mitchell.</div>
+          </div>
+
+          <div class="call-item">
+            <div class="call-top">
+              <span class="caller">+1 (310) 442-7761</span>
+              <span class="call-status done">Completed</span>
+            </div>
+            <div class="call-meta">
+              <span>1:52 PM</span>
+              <span>1m 10s</span>
+              <span class="intent-badge">Information</span>
+            </div>
+            <div class="call-summary">Asked about business hours and parking availability.</div>
+          </div>
+
+          <div class="call-item">
+            <div class="call-top">
+              <span class="caller">+1 (646) 903-2210</span>
+              <span class="call-status done">Completed</span>
+            </div>
+            <div class="call-meta">
+              <span>1:15 PM</span>
+              <span>4m 02s</span>
+              <span class="intent-badge">Message</span>
+            </div>
+            <div class="call-summary">Left a message for Dr. Chen regarding insurance documents.</div>
+          </div>
+        </div>
+
+        <div class="dash-activity">
+          <div class="dash-activity-header">Live Activity</div>
+
+          <div class="activity-item ev-ai">
+            <div class="time">2:35:41 PM</div>
+            <div class="text"><strong>AI:</strong> I'd be happy to help you schedule that. What day works best for you?</div>
+          </div>
+          <div class="activity-item ev-caller">
+            <div class="time">2:35:28 PM</div>
+            <div class="text"><strong>Caller:</strong> Hi, I'd like to book an appointment for next week.</div>
+          </div>
+          <div class="activity-item ev-call">
+            <div class="time">2:34:15 PM</div>
+            <div class="text"><strong>New call</strong> from +1 (415) 892-3047</div>
+          </div>
+          <div class="activity-item ev-end">
+            <div class="time">2:21:58 PM</div>
+            <div class="text">Call ended — Booked consultation for Thursday 10 AM</div>
+          </div>
+          <div class="activity-item ev-ai">
+            <div class="time">2:21:45 PM</div>
+            <div class="text"><strong>AI:</strong> You're all set, Sarah. Thursday at 10 AM. Have a great day!</div>
+          </div>
+          <div class="activity-item ev-caller">
+            <div class="time">2:20:30 PM</div>
+            <div class="text"><strong>Caller:</strong> Thursday at 10 would be perfect.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tech -->
+  <div class="tech-section">
+    <h2>Built With</h2>
+    <div class="tech-grid">
+      <div class="tech-item">Groq / Llama 3.3</div>
+      <div class="tech-item">Google Gemini</div>
+      <div class="tech-item">Twilio Voice</div>
+      <div class="tech-item">Node.js</div>
+      <div class="tech-item">WebSocket</div>
+      <div class="tech-item">SQLite</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    Built by <a href="https://github.com/lumestudiosweb-stack">lumestudiosweb-stack</a>
+  </div>
+
+</body>
+</html>
